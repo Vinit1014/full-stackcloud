@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./full-stack  # Path to the directory containing frontend Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5173:3000"  # Map container port 80 to host port 3000
+    networks:
+      - mynetwork
+
+  backend:
+    build:
+      context: ./server  # Path to the directory containing backend Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8000"  # Map container port 8000 to host port 8000
+    depends_on:
+      - db  # Assuming you have a MySQL database service named 'db'
+    networks:
+      - mynetwork
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "fullstackcloud"
+    ports:
+      - "3306:3306"  # Map container port 3306 to host port 3306
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
