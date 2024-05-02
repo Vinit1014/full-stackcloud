@@ -14,23 +14,77 @@ services:
     build:
       context: ./server  # Path to the directory containing backend Dockerfile
       dockerfile: Dockerfile
+    environment:
+      DB_HOST: mysql  # Hostname of the MySQL service
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root_password
+      DB_NAME: my_database
     ports:
-      - "8080:8000"  # Map container port 8000 to host port 8000
+      - "8080:8080"  # Map container port 8000 to host port 8000
     depends_on:
-      - db  # Assuming you have a MySQL database service named 'db'
-    networks:
-      - mynetwork
+      - mysql  # Assuming you have a MySQL database service named 'db'
+    
 
-  db:
+  mysql:
     image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "password"
       MYSQL_DATABASE: "fullstackcloud"
     ports:
-      - "3306:3306"  # Map container port 3306 to host port 3306
-    networks:
-      - mynetwork
+      - "3307:3306"  # Map container port 3306 to host port 3306
+    
 
 networks:
   mynetwork:
+
+
+# version: "3.2"
+# services:
+#   nodejs:
+#     build: 
+#       context: .
+#     image: amakundu/nodejs-mysql-app
+#     networks:
+#       - frontend
+#       - backend
+#     environment:
+#       - MYSQL_HOST=moe-mysql-app
+#       - MYSQL_USER=moeuser
+#       - MYSQL_PASS=moepass
+#       - MYSQL_DB=moe_db
+#     volumes:
+#       - ./www/:/var/www/html/
+#     ports:
+#       - "30001:8005"
+#     container_name: moe-nodejs-app
+#   mysql:
+#     image: mysql:5.7
+#     networks:
+#       - backend
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=root
+#       - MYSQL_USER=moeuser
+#       - MYSQL_PASSWORD=moepass 
+#       - MYSQL_DATABASE=moe_db
+#     container_name: moe-mysql-app
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin:4.7
+#     depends_on:
+#       - mysql
+#     networks:
+#       - backend
+#     ports:
+#       - "30002:80"
+#     environment:
+#       - PMA_HOST=moe-mysql-app
+#       - PMA_PORT= 3306
+#     volumes:
+#       - /sessions
+#     container_name: moe-phpmyadmin-app
+# networks:
+#   frontend:
+#   backend:
+

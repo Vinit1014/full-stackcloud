@@ -18,7 +18,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/submit', formData);
+      const response = await axios.post('http://localhost:8000/submit', formData);
       console.log(response.data); // Assuming backend sends back some response
     } catch (error) {
       console.error('Error:', error);
